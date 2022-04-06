@@ -1,0 +1,18 @@
+div.ConnectPage {
+  padding: 0 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  .ipInput, .portInput {
+    margin-bottom: 10px;
+    label { display: block; }
+    input {
+      width: 300px;
+    }
+  }
+
+  .submitButton {
+    
+  }
+}

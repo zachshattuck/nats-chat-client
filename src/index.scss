@@ -1,0 +1,41 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  color: #222;
+  background-color: rgb(187, 235, 187);
+}
+
+h1 {
+  font-size: 25px;
+}
+p.error {
+  color: rgb(170, 34, 34);
+  margin: 0;
+  &::after { //Make it so that when there is no text, it still takes up the space it needs to.
+    content: '.';
+    visibility: hidden;
+  }
+}
+
+input[type="text"] {
+  height: 35px;
+  border-radius: 6px;
+  border: 1px solid #222;
+  &:focus {
+    outline: 1px solid green;
+  }
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}

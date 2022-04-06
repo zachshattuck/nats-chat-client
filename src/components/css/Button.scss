@@ -1,0 +1,20 @@
+@import './mixins';
+
+div.Button {
+  flex-grow: 0;
+  width: fit-content;
+  background-color: rgb(226, 162, 44);
+  color: white;
+  height: 40px;
+  padding: 0 20px;
+  border-radius: 5px;
+  border: 1px solid rgb(194, 139, 36);
+  
+  @include center();
+  @include noselect();
+
+  cursor: pointer;
+  &:hover {
+    background-color: rgb(194, 139, 36);
+  }
+}

@@ -1,0 +1,11 @@
+div.MainPage {
+  padding: 0 10px;
+  .newMessage {
+    >* {
+      margin-bottom: 10px;
+    }
+    input {
+      width: 100%;
+    }
+  }
+}
