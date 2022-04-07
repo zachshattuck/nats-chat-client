@@ -1,5 +1,5 @@
-import { JSONCodec, NatsError, StringCodec, Subscription } from 'nats.ws'
-import React, { ChangeEventHandler, useEffect, useState } from 'react'
+import { JSONCodec } from 'nats.ws'
+import { ChangeEventHandler, useEffect, useState } from 'react'
 import { useNatsClient } from '../hooks/useNatsClient'
 import Button from './Button'
 import './css/MainPage.scss'
@@ -20,6 +20,7 @@ function MainPage({ userUUID, userName, port, hostname }: {userUUID: string, use
   const [messages, setMessages] = useState<Message[]>([])
 
 
+  //Subscribe to subjects and return cleanup
   useEffect(() => {
 
     if(!!client) {
@@ -50,7 +51,7 @@ function MainPage({ userUUID, userName, port, hostname }: {userUUID: string, use
   const handleMessageChange: ChangeEventHandler<HTMLInputElement> = e => {
     setMessage(e.target.value)
   }
-  
+
   const handleSend = () => {
     sendMessage("chat", message)
   }
@@ -67,6 +68,7 @@ function MainPage({ userUUID, userName, port, hostname }: {userUUID: string, use
             </div>)
           }
 
+          //Create unique color based on the user's UUID
           let unique = msg.userUUID.split('-')[4]
           let r = unique.substring(0, 2);
           let g = unique.substring(2, 4);
