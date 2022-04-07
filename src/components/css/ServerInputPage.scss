@@ -4,15 +4,11 @@ div.ConnectPage {
   flex-direction: column;
   align-items: center;
 
-  .ipInput, .portInput {
+  .ipInput, .portInput, .nameInput {
     margin-bottom: 10px;
     label { display: block; }
     input {
       width: 300px;
     }
-  }
-
-  .submitButton {
-    
   }
 }

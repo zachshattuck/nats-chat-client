@@ -1,16 +1,16 @@
-import React, { ChangeEvent, ChangeEventHandler, useState } from 'react'
-import { useNatsClient } from '../hooks/useNatsClient'
+import React, { useState } from 'react'
 import Button from './Button'
-import './css/ConnectPage.scss'
+import './css/ServerInputPage.scss'
 
-function ConnectPage({ onSubmit } : {onSubmit: (hostname: string, port: string) => void}) {
+function ServerInputPage({ onSubmit } : {onSubmit: (name: string, hostname: string, port: string) => void}) {
 
-  const [errors, setErrors] = useState({ip: '', port: ''})
+  const [errors, setErrors] = useState({name: '', ip: '', port: '',})
+  const [name, setName] = useState('')
   const [ip, setIp] = useState('')
   const [port, setPort] = useState('')
 
   const verifyInput = () => {
-    let newErrors = {ip: '', port: ''}
+    let newErrors = {ip: '', port: '', name: ''}
 
     //Grabbed this regex from stackoverflow lmao
     const ipRegex = /^(\d|[1-9]\d|1\d\d|2([0-4]\d|5[0-5]))\.(\d|[1-9]\d|1\d\d|2([0-4]\d|5[0-5]))\.(\d|[1-9]\d|1\d\d|2([0-4]\d|5[0-5]))\.(\d|[1-9]\d|1\d\d|2([0-4]\d|5[0-5]))$/
@@ -25,12 +25,15 @@ function ConnectPage({ onSubmit } : {onSubmit: (hostname: string, port: string) 
 
     if(!newErrors.ip && !newErrors.port) {
       // onSubmit(`${ip}:${port}`)
-      onSubmit(ip, port)
+      onSubmit(name, ip, port)
     }
 
     setErrors(newErrors)
   }
 
+  const handleNameChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
+    setName(e.target.value)      
+  }
   const handleIpChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
     setIp(e.target.value)    
   }
@@ -42,6 +45,12 @@ function ConnectPage({ onSubmit } : {onSubmit: (hostname: string, port: string) 
     <div className='ConnectPage'>
 
       <h1>Connect to a NATS (WS) Server</h1>
+
+      <div className="nameInput">
+        <label htmlFor="ip">Enter your <b>name</b>:</label>
+        <input type="text" name='name' value={name} onChange={handleNameChange} placeholder='Name' />
+        <p className="error">{errors.name}</p>
+      </div>
 
       <div className="ipInput">
         <label htmlFor="ip">Enter the <b>IP address</b> of the server:</label>
@@ -63,4 +72,4 @@ function ConnectPage({ onSubmit } : {onSubmit: (hostname: string, port: string) 
   )
 }
 
-export default ConnectPage
+export default ServerInputPage

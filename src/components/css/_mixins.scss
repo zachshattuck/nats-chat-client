@@ -16,3 +16,13 @@
             user-select: none; /* Non-prefixed version, currently
                                   supported by Chrome, Edge, Opera and Firefox */
 }
+
+@mixin niceScrollbar() {
+  &::-webkit-scrollbar { width: 15px; }
+  &::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    background-color: rgb(127, 151, 127);
+    border: 4px solid rgba(0, 0, 0, 0);
+    background-clip: padding-box;
+  }
+}
