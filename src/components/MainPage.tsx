@@ -1,4 +1,4 @@
-import { JSONCodec, StringCodec, Subscription } from 'nats.ws'
+import { JSONCodec, NatsError, StringCodec, Subscription } from 'nats.ws'
 import React, { ChangeEventHandler, useEffect, useState } from 'react'
 import { useNatsClient } from '../hooks/useNatsClient'
 import Button from './Button'
@@ -16,38 +16,43 @@ type Message = {
 
 function MainPage({ userUUID, userName, port, hostname }: {userUUID: string, userName: string, port: string, hostname: string}) {
 
-  let {state: clientObj, sendMessage} = useNatsClient(hostname, port, userName, userUUID)
-  const [subscriptions, setSubscriptions] = useState<(Subscription | undefined)[]>([])
+  let {client, sendMessage, subscribeToSubject, unsubscribeFromSubject} = useNatsClient(hostname, port, userName, userUUID)
   const [messages, setMessages] = useState<Message[]>([])
 
-  useEffect(() => {
-    if(!clientObj.loading) {
-      const chatMessagesSubscription = clientObj.client?.subscribe("hello")
-      const systemMessagesSubscription = clientObj.client?.subscribe("system")
-      setSubscriptions(cv => ([...cv, chatMessagesSubscription, systemMessagesSubscription]));
-    }
-  }, [clientObj.loading])
 
-  //Set up listening for messages
   useEffect(() => {
-    subscriptions.forEach(sub => {
-      if(sub !== undefined) {
-        const wait = async () => {
-          for await (const m of sub) {
-            setMessages(cv => [...cv, {...jc.decode(m.data) as Message, subject: sub.getSubject()} ])
-          }
+
+    if(!!client) {
+
+      subscribeToSubject("system", (err, msg) => {
+        if(err === null) {
+          setMessages(cv => [...cv, {...jc.decode(msg.data) as Message, subject: msg.subject} ])
         }
-        wait()
-      }
-    })
-  }, [subscriptions])
+      })
+
+      subscribeToSubject("chat", (err, msg) => {
+        if(err === null) {
+          setMessages(cv => [...cv, {...jc.decode(msg.data) as Message, subject: msg.subject} ])
+        }
+      })
+
+    }
+
+    return () => {
+      unsubscribeFromSubject("system")
+      unsubscribeFromSubject("chat")
+    }
+
+  }, [client, setMessages])
+
 
   const [message, setMessage] = useState<string>("")
   const handleMessageChange: ChangeEventHandler<HTMLInputElement> = e => {
     setMessage(e.target.value)
   }
+  
   const handleSend = () => {
-    sendMessage("hello", message)
+    sendMessage("chat", message)
   }
 
   return (
